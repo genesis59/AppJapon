@@ -4,10 +4,32 @@ CREATE DATABASE japon DEFAULT CHARACTER SET utf8;
 
 USE japon;
 
+CREATE TABLE users (
+    id INT UNSIGNED AUTO_INCREMENT,
+    lastname VARCHAR(100),
+    firstname VARCHAR(100),
+    pseudo VARCHAR(100),
+    email VARCHAR(100),
+    pass VARCHAR(100),
+    date_inscription DATE NOT NULL,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO users(lastname,firstname,pseudo,email,pass,date_inscription)
+VALUES ('dupont','jean','violon','dupont@mail.fr',123,'2020-07-03'),
+('durand','claire','ballon','durand@mail.fr',456,'2020-07-04'),
+('villon','jeanne','caramel','villon@mail.fr',789,'2020-07-05'),
+('doe','john','parachute','doe@mail.fr',987,'2020-07-06');
+
 CREATE TABLE kanji (
     id INT UNSIGNED AUTO_INCREMENT,
+    id_user INT UNSIGNED,
     symbole VARCHAR(30),
     nombreTrait VARCHAR(10),
+    add_list TINYINT (1) NOT NULL,
+    CONSTRAINT kanji_to_users
+    FOREIGN KEY (id_user)
+    REFERENCES users(id),
     PRIMARY KEY (id)
 );
 
@@ -69,3 +91,19 @@ CREATE OR REPLACE VIEW view_vocab AS
 SELECT k.id,k.symbole,v.kanji_japonais,v.prononciation,v.trad_fr FROM kanji k
 INNER JOIN lecture l ON k.id = l.id_kanji
 INNER JOIN vocabulaire_kanji v ON v.id_kanji = k.id;
+
+
+CREATE TABLE list_kanji (
+    id INT UNSIGNED AUTO_INCREMENT,
+    id_user INT UNSIGNED,
+    list_name VARCHAR(100),
+    CONSTRAINT list_kanji_to_users
+        FOREIGN KEY (id_user)
+        REFERENCES users(id),
+    PRIMARY KEY (id)
+);
+
+INSERT INTO list_kanji(id_user,list_name)
+VALUES (1,'mes kanji connus'),(1,'mes kanji à réviser'),
+(2,'mes kanji préférés'),(2,'mes kanji à apprendre'),
+(3,'mes super kanji'),(3,'kanji difficile');

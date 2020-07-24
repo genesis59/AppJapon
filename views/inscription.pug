@@ -1,0 +1,45 @@
+extend layout
+
+block content
+    h1 INSCRIPTION
+    form(method="post")
+        .row.mt-4.mx-5
+            .col-6.col-lg-5
+                label Prénom : 
+            .col-6.col-lg-5
+                label Nom : 
+        .row.mx-5
+            .col-10.col-lg-5
+                input.form-control(type="text" name="firstname" id="firstname" placeholder="Votre prénom" required)
+            .col-10.col-lg-5
+                input.form-control(type="text" name="lastname" id="lastname" placeholder="Votre nom"  required)
+        .row.mt-2.mx-5
+            .col-10.col-lg-5
+                label Pseudo : 
+        .row.mx-5
+            .col-10.col-lg-5
+                input.form-control(type="text" name="pseudo" id="pseudo" placeholder="Votre pseudo" required)
+        .row.mt-2.mx-5
+            .col-10.col-lg-5
+                label Email : 
+            .col-10.col-lg-5
+                label Confirmez Email :
+        .row.mx-5
+            .col-10.col-lg-5
+                input.form-control(type="email" name="email" id="email" placeholder="Votre email" required)
+            .col-10.col-lg-5
+                input.form-control(type="email" name="emailbis" id="emailbis" placeholder="Confirmation de votre email" required)
+        .row.mt-2.mx-5
+            .col-10.col-lg-5
+                label Mot de passe : 
+            .col-10.col-lg-5
+                label Confirmez mot de passe :
+        .row.mx-5.mb-5
+            .col-10.col-lg-5
+                input.form-control(type="password" name="pass" id="pass" placeholder="Votre mot de passe" required)
+            .col-10.col-lg-5
+                input.form-control(type="password" name="passbis" id="passbis" placeholder="Confirmation du mot de passe" required)
+            .col
+                button.btn.btn-secondary(type="submit") Valider
+        
+                
