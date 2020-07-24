@@ -1,0 +1,19 @@
+doctype html
+html
+    head
+        meta(charset="utf8")
+        block title
+        title Mon Site Japon
+        block js
+            script(src="/jquery/jquery.min.js")
+            script(src="/bootstrap/js/bootstrap.min.js")
+        block css
+        link(rel="stylesheet" href="/bootstrap/css/bootstrap.min.css")
+        style.
+            #fontsizexl {font-size: 10em;}
+    body(style="background-color: #f2f2f2;")
+        block header
+            include ./fragments/nav.pug
+        block content
+        block footer
+            include ./fragments/footer.pug
