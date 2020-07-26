@@ -59,7 +59,7 @@ router.post('/inscription', async (req, res) => {
     // test regex email
     const test = req.body.email.match(/^[a-z0-9_\-\.]+@[a-z0-9_\-\.]+\.[a-z]+$/i);
     // test regex password
-    const test2 = req.body.pass.match(/^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/);
+    const test2 = req.body.pass.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-!"§$%&/()=?+*~#'_:.,;]).{8,}$/);
     // Test si l'adresse n'existe pas dans la BD
     const checkEmail = await userDAO.checkEmail(req.body.email);
     if (test && test2 && checkEmail == undefined) {
@@ -95,7 +95,8 @@ router.post('/inscription', async (req, res) => {
             lastname: req.body.lastname,
             pseudo: req.body.pseudo,
             email: req.body.email,
-            testemail: testemail
+            testemail: testemail,
+
         }
         req.session.regenerate(() => {
             if (!test || checkEmail) {
