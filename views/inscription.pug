@@ -1,45 +1,96 @@
 extend layout
 
 block content
-    h1 INSCRIPTION
-    form(method="post")
-        .row.mt-4.mx-5
-            .col-6.col-lg-5
-                label Prénom : 
-            .col-6.col-lg-5
-                label Nom : 
-        .row.mx-5
-            .col-10.col-lg-5
-                input.form-control(type="text" name="firstname" id="firstname" placeholder="Votre prénom" required)
-            .col-10.col-lg-5
-                input.form-control(type="text" name="lastname" id="lastname" placeholder="Votre nom"  required)
-        .row.mt-2.mx-5
-            .col-10.col-lg-5
-                label Pseudo : 
-        .row.mx-5
-            .col-10.col-lg-5
-                input.form-control(type="text" name="pseudo" id="pseudo" placeholder="Votre pseudo" required)
-        .row.mt-2.mx-5
-            .col-10.col-lg-5
-                label Email : 
-            .col-10.col-lg-5
-                label Confirmez Email :
-        .row.mx-5
-            .col-10.col-lg-5
-                input.form-control(type="email" name="email" id="email" placeholder="Votre email" required)
-            .col-10.col-lg-5
-                input.form-control(type="email" name="emailbis" id="emailbis" placeholder="Confirmation de votre email" required)
-        .row.mt-2.mx-5
-            .col-10.col-lg-5
-                label Mot de passe : 
-            .col-10.col-lg-5
-                label Confirmez mot de passe :
-        .row.mx-5.mb-5
-            .col-10.col-lg-5
-                input.form-control(type="password" name="pass" id="pass" placeholder="Votre mot de passe" required)
-            .col-10.col-lg-5
-                input.form-control(type="password" name="passbis" id="passbis" placeholder="Confirmation du mot de passe" required)
-            .col
-                button.btn.btn-secondary(type="submit") Valider
-        
-                
+    h1.text-center INSCRIPTION
+    //- Conservation des saisies utilisateurs après une erreur dans l'inscription
+    if firstname
+        form(method="post")
+            .row.mt-4.mx-5
+                .col-6.col-lg-5
+                    label Prénom : 
+                .col-6.col-lg-5
+                    label Nom : 
+            .row.mx-5
+                .col-10.col-lg-5
+                    input.form-control(type="text" name="firstname" id="firstname" value=firstname required)
+                .col-10.col-lg-5
+                    input.form-control(type="text" name="lastname" id="lastname" value=lastname  required)
+            .row.mt-2.mx-5
+                .col-10.col-lg-5
+                    label Pseudo : 
+            .row.mx-5
+                .col-10.col-lg-5
+                    input.form-control(type="text" name="pseudo" id="pseudo" value=pseudo required)
+            .row.mt-2.mx-5
+                .col-10.col-lg-5
+                    label Email : 
+                .col-10.col-lg-5
+                    label Confirmez Email :
+            //- affichage different si mdp et email faux ou si juste mdp
+            if testemail
+                .row.mx-5
+                    .col-10.col-lg-5
+                        input.form-control(type="email" name="email" id="email" value=email required)
+                    .col-10.col-lg-5
+                        input.form-control(type="email" name="emailbis" id="emailbis" value=email required)
+            else
+                .row.mx-5
+                    .col-10.col-lg-5
+                        input.form-control(type="email" name="email" id="email" class="redBorder" value=email required)
+                    .col-10.col-lg-5
+                        input.form-control(type="email" name="emailbis" id="emailbis" class="redBorder" value=email required)
+            .row.mt-2.mx-5
+                .col-10.col-lg-5
+                    label Mot de passe (*) : 
+                .col-10.col-lg-5
+                    label Confirmez mot de passe(*) :
+            .row.mx-5.mb-5
+                .col-10.col-lg-5
+                    input.form-control(type="password" name="pass" id="pass" class="redBorder" placeholder="Votre mot de passe" required)
+                .col-10.col-lg-5
+                    input.form-control(type="password" name="passbis" id="passbis" class="redBorder" placeholder="Confirmation du mot de passe" required)
+                .col
+                    button.btn.btn-secondary(type="submit") Valider
+    //- Formulaire origine
+    else
+        form(method="post")
+            .row.mt-4.mx-5
+                .col-6.col-lg-5
+                    label Prénom : 
+                .col-6.col-lg-5
+                    label Nom : 
+            .row.mx-5
+                .col-10.col-lg-5
+                    input.form-control(type="text" name="firstname" id="firstname" placeholder="Votre prénom" required)
+                .col-10.col-lg-5
+                    input.form-control(type="text" name="lastname" id="lastname" placeholder="Votre nom"  required)
+            .row.mt-2.mx-5
+                .col-10.col-lg-5
+                    label Pseudo : 
+            .row.mx-5
+                .col-10.col-lg-5
+                    input.form-control(type="text" name="pseudo" id="pseudo" placeholder="Votre pseudo" required)
+            .row.mt-2.mx-5
+                .col-10.col-lg-5
+                    label Email : 
+                .col-10.col-lg-5
+                    label Confirmez Email :
+            .row.mx-5
+                .col-10.col-lg-5
+                    input.form-control(type="email" name="email" id="email" placeholder="Votre email" required)
+                .col-10.col-lg-5
+                    input.form-control(type="email" name="emailbis" id="emailbis" placeholder="Confirmation de votre email" required)
+            .row.mt-2.mx-5
+                .col-10.col-lg-5
+                    label Mot de passe (*) : 
+                .col-10.col-lg-5
+                    label Confirmez mot de passe (*):
+            .row.mx-5.mb-4
+                .col-10.col-lg-5
+                    input.form-control(type="password" name="pass" id="pass" placeholder="Votre mot de passe" required)
+                .col-10.col-lg-5
+                    input.form-control(type="password" name="passbis" id="passbis" placeholder="Confirmation du mot de passe" required)
+                .col
+                    button.btn.btn-secondary(type="submit") Valider
+    .container-fluid.mb-5
+        p (*) Le mot de passe doit contenir 8 caractères contenant au moins 1 Majuscule,1 minuscule, 1 chiffre et 1 caractère spécial !            

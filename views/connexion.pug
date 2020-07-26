@@ -1,4 +1,17 @@
 extend layout
 
 block content
-    h1 bonjour
+    h1 LOGIN
+    form(method="post")
+        .row.mt-4.mx-5
+            .col-6.col-lg-5
+                label Email : 
+            .col-6.col-lg-5
+                label Mot de passe : 
+        .row.mx-5.mb-5
+            .col-10.col-lg-5
+                input.form-control(type="text" name="email" id="email" placeholder="Votre email" required)
+            .col-10.col-lg-5
+                input.form-control(type="password" name="pass" id="pass" placeholder="Votre mot de passe"  required)
+            .col
+                button.btn.btn-secondary(type="submit") Valider

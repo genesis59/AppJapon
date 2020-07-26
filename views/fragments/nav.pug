@@ -12,3 +12,10 @@ nav.navbar.navbar-light.navbar-expand-lg(style="background-color: #8c031c;")
             a.nav-link.ml-3(href="/inscription" style="color: #f2f2f2") INSCRIPTION 登録
             li.nav-item
             a.nav-link.ml-3(href="/connexion" style="color: #f2f2f2") LOGIN ログインする
+            li.nav-item  
+            a.nav-link.ml-3(href="/logout" style="color: #f2f2f2") LOGOUT
+            li.nav-item  
+                if user
+                    span.nav-link.ml-3(style="color: #f2f2f2") Bienvenue #{user.pseudo}
+                else
+                    span.nav-link.ml-3(style="color: #f2f2f2") Bienvenue invité

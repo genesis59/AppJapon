@@ -9,17 +9,17 @@ CREATE TABLE users (
     lastname VARCHAR(100),
     firstname VARCHAR(100),
     pseudo VARCHAR(100),
-    email VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
     pass VARCHAR(100),
     date_inscription DATE NOT NULL,
     PRIMARY KEY (id)
 );
 
 INSERT INTO users(lastname,firstname,pseudo,email,pass,date_inscription)
-VALUES ('dupont','jean','violon','dupont@mail.fr',123,'2020-07-03'),
-('durand','claire','ballon','durand@mail.fr',456,'2020-07-04'),
-('villon','jeanne','caramel','villon@mail.fr',789,'2020-07-05'),
-('doe','john','parachute','doe@mail.fr',987,'2020-07-06');
+VALUES ('dupont','jean','violon','dupont@mail.fr','$2b$04$GoWjOmMv7knRMXkAFp3CUuIUZkSnXXqHEuVfhnUNkP80ZMnmamif.','2020-07-03'),
+('durand','claire','ballon','durand@mail.fr','$2b$04$GoWjOmMv7knRMXkAFp3CUuIUZkSnXXqHEuVfhnUNkP80ZMnmamif.','2020-07-04'),
+('villon','jeanne','caramel','villon@mail.fr','$2b$04$GoWjOmMv7knRMXkAFp3CUuIUZkSnXXqHEuVfhnUNkP80ZMnmamif.','2020-07-05'),
+('doe','john','parachute','doe@mail.fr','$2b$04$GoWjOmMv7knRMXkAFp3CUuIUZkSnXXqHEuVfhnUNkP80ZMnmamif.','2020-07-06');
 
 CREATE TABLE kanji (
     id INT UNSIGNED AUTO_INCREMENT,

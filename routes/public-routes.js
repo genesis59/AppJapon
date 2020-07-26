@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const bcrypt = require('bcrypt');
 const kanjiDAO = require('../models/kanji-model');
 const lectureDAO = require('../models/lecture-model');
 const vocabDAO = require('../models/vocab-model');
@@ -13,6 +14,7 @@ router.get('/home', (req, res) => {
     res.render('home');
 
 });
+
 // ROUTE ACCUEIL PAGE KANJI
 router.get('/kanji', async (req, res) => {
     const data = await kanjiDAO.allKanji();
@@ -28,21 +30,6 @@ router.get('/kanji', async (req, res) => {
         vocab: result3
     });
 });
-
-// ROUTE INSCRIPTION
-
-router.get('/inscription', (req,res) => {
-    res.render('inscription');
-});
-
-// ROUTE CONNEXION
-
-router.get('/connexion', (req,res) => {
-    res.render('connexion');
-});
-
-// --------------------------  route post ----------------------
-
 
 // ROUTE RECHERCHE KANJI
 router.post('/kanji', async (req, res) => {
@@ -64,7 +51,6 @@ router.post('/kanji', async (req, res) => {
             // Boucle si plusieurs résultat
             for (let file of result) {
                 if (file.id) {
-                    console.log(file);
                     const result2 = await vocabDAO.findVocabularyById(file.id);
                     result3.push(result2);
                 }
@@ -89,20 +75,5 @@ router.post('/kanji', async (req, res) => {
     }
 
 });
-// ROUTE INSCRIPTION
-router.post('/inscription', async (req,res) =>{
-    const time = new Date();
-    const data = {
-        lastname: req.body.lastname,
-        firstname: req.body.firstname,
-        pseudo: req.body.pseudo,
-        email: req.body.email,
-        pass: req.body.pass,
-        date_inscription: time
-    };
-    const result = await userDAO.insertUser(data);
-    res.redirect('/home');
-});
-
 
 module.exports = router;

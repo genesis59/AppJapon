@@ -11,9 +11,22 @@ html
         link(rel="stylesheet" href="/bootstrap/css/bootstrap.min.css")
         style.
             #fontsizexl {font-size: 10em;}
+            .redBorder {border: 2px solid red}
     body(style="background-color: #f2f2f2;")
         block header
             include ./fragments/nav.pug
+        .row.justify-content-center.mt-5
+            .col-md-6.text-center
+                - const messages = getMessages()
+                if messages
+                    if messages.infos
+                        .alert.alert-success
+                            each message in messages.infos
+                                p= message
+                    if messages.errors
+                        .alert.alert-danger
+                            each message in messages.errors
+                                p= message
         block content
         block footer
             include ./fragments/footer.pug
