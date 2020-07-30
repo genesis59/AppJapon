@@ -4,7 +4,7 @@
   "description": "app pour apprendre le japonais",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "author": "greg",
   "license": "ISC",
