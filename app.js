@@ -52,6 +52,9 @@ app.use(require('./routes/public-routes'));
 app.use(require('./routes/authentification-routes'));
 
 // Ecoute du serveur
-app.listen(3000,() => {
+app.listen(3000,(err) => {
+    if (err){
+        console.error(err);
+    }
     console.log('server started');
 });

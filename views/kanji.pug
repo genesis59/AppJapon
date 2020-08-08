@@ -3,6 +3,23 @@ extend layout
 block content
     .container.container-fluid-lg
         h1.mt-3 LES IDEOGRAMMES 漢字
+        form.mt-4(method="post")
+            .form-group.mb-2
+                label.font-weight-bolder Type de recherche :
+                select.custom-select.mb-3(name="typeSearch")
+                    //- Si une modif est faite sur 'Choisissez un type de recherche' 
+                    //- ne pas oublier de le changer dans public-routes.js 
+                    option.selected Choisissez un type de recherche  
+                    option(value="symbole") Rechercher avec son idéogramme
+                    option(value="onyomi") Rechercher par lecture ON
+                    option(value="kunyomi") Rechercher par lecture KUN
+                    option(value="trad_fr") Rechercher le mot français
+                    option(value="nombreTrait") Recherche un kanji par son nombre de trait
+            .form-group.mb-2
+                label.font-weight-bolder(for="search") Rechercher un kanji : 
+                input#search.mx-3(type="text" name="search")
+                button.btn.btn-secondary(type="submit") Valider
+                span.ml-2= error
         .row.mt-4
             each line in kanji
                 
@@ -29,7 +46,7 @@ block content
 
                         each section in vocab
                             if(section[0].id == line.id)
-                                each file in section                       
+                                each file in section                   
                                     tr
                                         td= file.kanji_japonais
                                         td= file.prononciation

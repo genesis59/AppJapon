@@ -25,6 +25,7 @@ router.get('/kanji', async (req, res) => {
     // d'une recherche sur la route router.post('/kanji', async (req, res))
     let result3 = [];
     result3.push(result2);
+    console.log(result3);
     res.render('kanji', {
         kanji: [data[aleaKanji]],
         vocab: result3
@@ -54,6 +55,7 @@ router.post('/kanji', async (req, res) => {
                     const result2 = await vocabDAO.findVocabularyById(file.id);
                     result3.push(result2);
                 }
+                console.log(result3);
             }
             res.render('kanji', {
                 kanji: result,
