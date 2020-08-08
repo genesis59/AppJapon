@@ -33,15 +33,17 @@ block content
                             td(style="background-color: #bf0426; color: white;") nombre de Traits
                             td(style="background-color: #bf0426; color: white;") Onyomi
                             td(style="background-color: #bf0426; color: white;") Kunyomi
-                            td(style="background-color: #bf0426; color: white;") Traduction
+                            td(style="background-color: #bf0426; color: white;") Traduction Fr
+                            td(style="background-color: #bf0426; color: white;") Traduction Us
                         tr
                             th= line.nombreTrait
                             th= line.onyomi
                             th= line.kunyomi
                             th= line.trad_fr
+                            th= line.trad_en
                         tr
                             td(colspan=1 style="background-color: #bf0426; color: white;") Vocabulaire
-                            td(colspan=1 style="background-color: #bf0426; color: white;") Prononciation
+                            td(colspan=2 style="background-color: #bf0426; color: white;") Prononciation
                             td(colspan=2 style="background-color: #bf0426; color: white;") Traduction   
 
                         each file in vocab
@@ -50,25 +52,8 @@ block content
                                 -for( i=0; i < file.kanji_japonais.length; i++)
                                     tr
                                         td= file.kanji_japonais[i]
-                                        td= file.prononciation[i]
+                                        td(colspan=2)= file.prononciation[i]
                                         td(colspan=2)= file.trad_fr[i]
-        form.mt-4(method="post")
-            .form-group.mb-2
-                label.font-weight-bolder Type de recherche :
-                select.custom-select.mb-3(name="typeSearch")
-                    //- Si une modif est faite sur 'Choisissez un type de recherche' 
-                    //- ne pas oublier de le changer dans public-routes.js 
-                    option.selected Choisissez un type de recherche  
-                    option(value="symbole") Rechercher avec son idéogramme
-                    option(value="onyomi") Rechercher par lecture ON
-                    option(value="kunyomi") Rechercher par lecture KUN
-                    option(value="trad_fr") Rechercher le mot français
-                    option(value="nombreTrait") Recherche un kanji par son nombre de trait
-            .form-group.mb-2
-                label.font-weight-bolder(for="search") Rechercher un kanji : 
-                input#search.mx-3(type="text" name="search")
-                button.btn.btn-secondary(type="submit") Valider
-                span.ml-2= error
         h2.my-3 MES LISTES DE KANJI
         p Lorem ipsum dolor sit amet consectetur adipisicing elit.
         p Placeat eos provident quia. Doloremque dicta quis, exercitationem
