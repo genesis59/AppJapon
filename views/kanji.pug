@@ -44,13 +44,14 @@ block content
                             td(colspan=1 style="background-color: #bf0426; color: white;") Prononciation
                             td(colspan=2 style="background-color: #bf0426; color: white;") Traduction   
 
-                        each section in vocab
-                            if(section[0].id == line.id)
-                                each file in section                   
+                        each file in vocab
+                            if(file.id == line.id)                       
+                                -var i;
+                                -for( i=0; i < file.kanji_japonais.length; i++)
                                     tr
-                                        td= file.kanji_japonais
-                                        td= file.prononciation
-                                        td(colspan=2)= file.trad_fr
+                                        td= file.kanji_japonais[i]
+                                        td= file.prononciation[i]
+                                        td(colspan=2)= file.trad_fr[i]
         form.mt-4(method="post")
             .form-group.mb-2
                 label.font-weight-bolder Type de recherche :

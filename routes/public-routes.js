@@ -23,43 +23,53 @@ router.get('/kanji', async (req, res) => {
     const result2 = await vocabDAO.findVocabularyById(aleaKanji + 1);
     // Création d' une variable pour permettre l'affichage multiples 
     // d'une recherche sur la route router.post('/kanji', async (req, res))
-    let result3 = [];
-    result3.push(result2);
-    console.log(result3);
+    let resultJson = [];
+    resultJson.push(JSON.parse(JSON.stringify(result2[0])));
+    // Transformation des chaines de caratere des champs de la BD en tableau
+    for (let file of resultJson) {
+        file.kanji_japonais = file.kanji_japonais.split(',');
+        file.prononciation = file.prononciation.split(',');
+        file.trad_fr = file.trad_fr.split(',');
+    }
     res.render('kanji', {
         kanji: [data[aleaKanji]],
-        vocab: result3
+        vocab: resultJson
     });
 });
 
 // ROUTE RECHERCHE KANJI
 router.post('/kanji', async (req, res) => {
 
-    // Vérification que le champ n'est pas vide
+    // Vérification que le champ recherche n'est pas vide
     if (req.body.search) {
         let result = [];
         if (req.body.typeSearch != 'Choisissez un type de recherche') {
-            // recupération de la saisie et du type et recherche de résultat dans la BD
+            // recupération de la saisie et du type de recherche
             result = await kanjiDAO.findKanjiBySearchField(req.body.typeSearch, req.body.search);
         } else {
-            // Type non renseigné donc recherche basique
+            // Si type non renseigné donc recherche basique
             result = await kanjiDAO.findKanjiBySearch(req.body.search);
         }
-
         // Vérification si un résultat a été trouvé
         if (result[0] !== undefined) {
-            let result3 = [];
+            result = JSON.parse(JSON.stringify(result));
             // Boucle si plusieurs résultat
+            let resultJson = [];
             for (let file of result) {
                 if (file.id) {
                     const result2 = await vocabDAO.findVocabularyById(file.id);
-                    result3.push(result2);
+                    resultJson.push(JSON.parse(JSON.stringify(result2[0])));
                 }
-                console.log(result3);
+            }
+            // Transformation des chaines de caratere des champs de la BD en tableau
+            for (let file of resultJson) {
+                file.kanji_japonais = file.kanji_japonais.split(',');
+                file.prononciation = file.prononciation.split(',');
+                file.trad_fr = file.trad_fr.split(',');
             }
             res.render('kanji', {
                 kanji: result,
-                vocab: result3
+                vocab: resultJson
             });
         } else {
             res.render('kanji', {
