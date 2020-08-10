@@ -1,7 +1,7 @@
 extend layout
 
 block content
-    .container.container-fluid-lg
+    .container-lg
         h1.mt-3 LES IDEOGRAMMES 漢字
         form.mt-4(method="post")
             .form-group.mb-2
@@ -20,38 +20,39 @@ block content
                 input#search.mx-3(type="text" name="search")
                 button.btn.btn-secondary(type="submit") Valider
                 span.ml-2= error
-        .row.mt-4
-            each line in kanji
-                
-                .col-lg-3.d-flex.align-items-center.justify-content-center.flex-column.border.border-dark 
-                    p#fontsizexl.font-weight-bolder= line.symbole
-                    form.mt-4(method="post")
-                        a.btn.btn-secondary.mx-3(href="/kanji" role="button")  kanji aléatoire 
-                .col-lg-9.font-weight-bolder.border.border-dark
-                    table.table.table-striped.text-center.border.mt-3
-                        tr
-                            td(style="background-color: #bf0426; color: white;") nombre de Traits
-                            td(style="background-color: #bf0426; color: white;") Onyomi
-                            td(style="background-color: #bf0426; color: white;") Kunyomi
-                            td(style="background-color: #bf0426; color: white;") Traduction
-                        tr
-                            th= line.nombreTrait
-                            th= line.onyomi
-                            th= line.kunyomi
-                            th= line.trad_fr
-                        tr
-                            td(colspan=1 style="background-color: #bf0426; color: white;") Vocabulaire
-                            td(colspan=1 style="background-color: #bf0426; color: white;") Prononciation
-                            td(colspan=2 style="background-color: #bf0426; color: white;") Traduction   
+        .container-lg
+            .row.mt-4
+                each line in kanji
+                    
+                    .col-lg-3.d-flex.align-items-center.justify-content-center.flex-column.border.border-dark 
+                        p#fontsizexl.font-weight-bolder= line.symbole
+                        form.mt-4(method="post")
+                            a.btn.btn-secondary.mx-3(href="/kanji" role="button")  kanji aléatoire 
+                    .col-lg-9.font-weight-bolder.border.border-dark
+                        table.table.table-striped.text-center.border.mt-3
+                            tr
+                                td(style="background-color: #bf0426; color: white;") nombre de Traits
+                                td(style="background-color: #bf0426; color: white;") Onyomi
+                                td(style="background-color: #bf0426; color: white;") Kunyomi
+                                td(style="background-color: #bf0426; color: white;") Traduction
+                            tr
+                                th= line.nombreTrait
+                                th= line.onyomi
+                                th= line.kunyomi
+                                th= line.trad_fr
+                            tr
+                                td(colspan=1 style="background-color: #bf0426; color: white;") Vocabulaire
+                                td(colspan=1 style="background-color: #bf0426; color: white;") Prononciation
+                                td(colspan=2 style="background-color: #bf0426; color: white;") Traduction   
 
-                        each file in vocab
-                            if(file.id == line.id)                       
-                                -var i;
-                                -for( i=0; i < file.kanji_japonais.length; i++)
-                                    tr
-                                        td= file.kanji_japonais[i]
-                                        td= file.prononciation[i]
-                                        td(colspan=2)= file.trad_fr[i]
+                            each file in vocab
+                                if(file.id == line.id)                       
+                                    -var i;
+                                    -for( i=0; i < file.kanji_japonais.length; i++)
+                                        tr
+                                            td= file.kanji_japonais[i]
+                                            td= file.prononciation[i]
+                                            td(colspan=2)= file.trad_fr[i]
         form.mt-4(method="post")
             .form-group.mb-2
                 label.font-weight-bolder Type de recherche :
