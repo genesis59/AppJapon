@@ -34,10 +34,17 @@ app.use((req, res, next) => {
     next();
 });
 
-// middleware pour affichage d'une requête flash après déconnexion
+// middleware pour affichage d'une requête flash après redirection
 app.use((req,res,next) => {
     if (req.query.logout == 'true' && req.path == '/home' ) {
         req.flash('infos','Vous êtes déconnecté');
+    }
+    next();
+});
+
+app.use((req,res,next) => {
+    if (req.query.liste == 'true' && req.path == '/connexion' ) {
+        req.flash('errors', 'Vous devez être connectez pour accéder à vos informations.');
     }
     next();
 });
@@ -51,6 +58,7 @@ app.use('/css',express.static('public/css'));
 // liaison des routes
 app.use(require('./routes/public-routes'));
 app.use(require('./routes/authentification-routes'));
+app.use(require('./routes/users-routes'));
 
 // Ecoute du serveur
 app.listen(3000,(err) => {

@@ -108,3 +108,16 @@ INSERT INTO list_kanji(id_user,list_name)
 VALUES (1,'mes kanji connus'),(1,'mes kanji à réviser'),
 (2,'mes kanji préférés'),(2,'mes kanji à apprendre'),
 (3,'mes super kanji'),(3,'kanji difficile');
+
+CREATE TABLE content_list (
+    id INT UNSIGNED AUTO_INCREMENT,
+    id_user INT UNSIGNED,
+    id_list INT UNSIGNED,
+    CONSTRAINT content_list_to_users
+        FOREIGN KEY (id_user)
+        REFERENCES users(id),
+    CONSTRAINT content_list_to_list_kanji
+        FOREIGN KEY (id_list)
+        REFERENCES list_kanji(id),
+    PRIMARY KEY (id)
+);

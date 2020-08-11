@@ -7,13 +7,19 @@ nav.navbar.navbar-light.navbar-expand-lg(style="background-color: #8c031c;")
             li.nav-item
             a.nav-link.text-bold(href="/home" style="color: #f2f2f2") ACCUEIL ホーム
             li.nav-item
-            a.nav-link.ml-3(href="/kanji" style="color: #f2f2f2") KANJI 漢字
-            li.nav-item
-            a.nav-link.ml-3(href="/inscription" style="color: #f2f2f2") INSCRIPTION 登録
-            li.nav-item
-            a.nav-link.ml-3(href="/connexion" style="color: #f2f2f2") LOGIN ログインする
-            li.nav-item  
-            a.nav-link.ml-3(href="/logout" style="color: #f2f2f2") LOGOUT
+            a.nav-link.ml-3(href="/kanji/1" style="color: #f2f2f2") KANJI 漢字
+            if user
+                li.nav-item
+                a.nav-link.ml-3(href="/listes" style="color: #f2f2f2") MES LISTES DE KANJI
+            if !user
+                li.nav-item
+                a.nav-link.ml-3(href="/inscription" style="color: #f2f2f2") INSCRIPTION 登録
+            if !user
+                li.nav-item
+                a.nav-link.ml-3(href="/connexion" style="color: #f2f2f2") LOGIN ログインする
+            if user
+                li.nav-item  
+                a.nav-link.ml-3(href="/logout" style="color: #f2f2f2") LOGOUT
             li.nav-item  
                 if user
                     span.nav-link.ml-3(style="color: #f2f2f2") Bienvenue #{user.pseudo}

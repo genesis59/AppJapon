@@ -16,10 +16,16 @@ kanjiDAO.findKanjiBySearch= async (value) => {
     return result[0];
 };
 
-kanjiDAO.findKanjiBySearchField= async (field,value) => {
+kanjiDAO.findKanjiBySearchFieldWithLimit= async (field,value,page) => {
+    const result = await kanjiDAO.query(`SELECT * FROM kanji k
+    INNER JOIN lecture l ON k.id = l.id_kanji WHERE ?? LIKE CONCAT('%',?,'%') LIMIT ?,5;`,[field,value,page]);
+    return result[0];
+};
+
+kanjiDAO.findPagesSearch= async (field,value) => {
     const result = await kanjiDAO.query(`SELECT * FROM kanji k
     INNER JOIN lecture l ON k.id = l.id_kanji WHERE ?? LIKE CONCAT('%',?,'%');`,[field,value]);
-    return result[0];
+    return result[0].length;
 };
 
 

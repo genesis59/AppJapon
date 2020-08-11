@@ -1,10 +1,6 @@
 const router = require('express').Router();
-const bcrypt = require('bcrypt');
 const kanjiDAO = require('../models/kanji-model');
-const lectureDAO = require('../models/lecture-model');
 const vocabDAO = require('../models/vocab-model');
-const userDAO = require('../models/users-model');
-const listDAO = require('../models/list-model');
 
 
 // ---------------------    route get ----------------------
@@ -16,36 +12,81 @@ router.get('/home', (req, res) => {
 });
 
 // ROUTE ACCUEIL PAGE KANJI
-router.get('/kanji', async (req, res) => {
-    const data = await kanjiDAO.allKanji();
-    // Affichage aléatoire d'un Kanji de la BD en arrivant sur la page
-    let aleaKanji = Math.floor(Math.random() * (data.length));
-    const result2 = await vocabDAO.findVocabularyById(aleaKanji + 1);
-    // Création d' une variable pour permettre l'affichage multiples 
-    // d'une recherche sur la route router.post('/kanji', async (req, res))
-    let resultJson = [];
-    resultJson.push(JSON.parse(JSON.stringify(result2[0])));
-    // Transformation des chaines de caratere des champs de la BD en tableau
-    for (let file of resultJson) {
-        file.kanji_japonais = file.kanji_japonais.split(',');
-        file.prononciation = file.prononciation.split(',');
-        file.trad_fr = file.trad_fr.split(',');
+router.get('/kanji/:page([1-9]+)', async (req, res) => {
+    const params = req.params.page;
+    // affichage initial (pas de recherche en session)
+    if (!req.session.recherche) {
+        const data = await kanjiDAO.allKanji();
+        // Affichage aléatoire d'un Kanji de la BD en arrivant sur la page
+        let aleaKanji = Math.floor(Math.random() * (data.length));
+        const result2 = await vocabDAO.findVocabularyById(aleaKanji + 1);
+        // Création d' une variable pour permettre l'affichage multiples 
+        // d'une recherche sur la route router.post('/kanji', async (req, res))
+        let resultJson = [];
+        resultJson.push(JSON.parse(JSON.stringify(result2[0])));
+        // Transformation des chaines de caratere des champs de la BD en tableau
+        for (let file of resultJson) {
+            file.kanji_japonais = file.kanji_japonais.split(',');
+            file.prononciation = file.prononciation.split(',');
+            file.trad_fr = file.trad_fr.split(',');
+        }
+        res.render('kanji', {
+            kanji: [data[aleaKanji]],
+            vocab: resultJson,
+            params: params
+        });
+    } else {
+        // si critères de recherche déjà présent dans la session
+        let reqPage = (params - 1) * 5;
+        result = await kanjiDAO.findKanjiBySearchFieldWithLimit(req.session.typeRecherche, req.session.recherche, reqPage);
+        result = JSON.parse(JSON.stringify(result));
+        // Boucle si plusieurs résultat
+        let resultJson = [];
+        for (let file of result) {
+            if (file.id) {
+                const result2 = await vocabDAO.findVocabularyById(file.id);
+                resultJson.push(JSON.parse(JSON.stringify(result2[0])));
+            }
+        }
+        // Transformation des chaines de caratere des champs de la BD en tableau
+        for (let file of resultJson) {
+            file.kanji_japonais = file.kanji_japonais.split(',');
+            file.prononciation = file.prononciation.split(',');
+            file.trad_fr = file.trad_fr.split(',');
+        }
+
+        res.render('kanji', {
+            page: req.session.page,
+            nbPages: req.session.nbPages,
+            kanji: result,
+            vocab: resultJson,
+            params: params,
+            nbResult: req.session.nbResult
+        });
     }
-    res.render('kanji', {
-        kanji: [data[aleaKanji]],
-        vocab: resultJson
-    });
 });
 
 // ROUTE RECHERCHE KANJI
-router.post('/kanji', async (req, res) => {
-
+router.post('/kanji/:page([1-9]+)', async (req, res) => {
+    // Initialisation des variables pour la pagination
+    const params = req.params.page
+    let nbPages;
+    let nbResult;
+    let reqPage = (params - 1) * 5;
+    req.session.page = 1;
+    req.session.recherche = req.body.search;
+    req.session.typeRecherche = req.body.typeSearch;
     // Vérification que le champ recherche n'est pas vide
     if (req.body.search) {
         let result = [];
         if (req.body.typeSearch != 'Choisissez un type de recherche') {
             // recupération de la saisie et du type de recherche
-            result = await kanjiDAO.findKanjiBySearchField(req.body.typeSearch, req.body.search);
+            result = await kanjiDAO.findKanjiBySearchFieldWithLimit(req.body.typeSearch, req.body.search, reqPage);
+            // Calcul nombre de pages nécéssaires à la pagination
+            nbResult = await kanjiDAO.findPagesSearch(req.body.typeSearch, req.body.search);
+            req.session.nbResult = nbResult;
+            nbPages = Math.ceil(nbResult / 5);
+            req.session.nbPages = nbPages;
         } else {
             // Si type non renseigné donc recherche basique
             result = await kanjiDAO.findKanjiBySearch(req.body.search);
@@ -68,8 +109,12 @@ router.post('/kanji', async (req, res) => {
                 file.trad_fr = file.trad_fr.split(',');
             }
             res.render('kanji', {
+                page: req.session.page,
+                nbPages: nbPages,
                 kanji: result,
-                vocab: resultJson
+                vocab: resultJson,
+                params: params,
+                nbResult: req.session.nbResult
             });
         } else {
             res.render('kanji', {
@@ -86,6 +131,31 @@ router.post('/kanji', async (req, res) => {
         });
     }
 
+});
+
+// Suppresion des valeurs de session de recherche et affichage 
+router.get('/alea', (req, res) => {
+    req.session.recherche = undefined;
+    req.session.typeRecherche = undefined;
+    req.session.nbPages = undefined;
+    req.session.page = 1;
+    res.redirect('/kanji/1')
+})
+
+// page suivante
+router.get('/next', (req, res) => {
+    let page = req.session.page;
+    page++;
+    req.session.page = page
+    res.redirect('/kanji/' + page);
+});
+
+// page précédente
+router.get('/previous', (req, res) => {
+    let page = req.session.page;
+    page--;
+    req.session.page = page
+    res.redirect('/kanji/' + page);
 });
 
 module.exports = router;

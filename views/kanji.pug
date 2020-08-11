@@ -1,9 +1,10 @@
 extend layout
 
 block content
-    .container-lg
+    .container-lg(id="hautDePage")
         h1.mt-3 LES IDEOGRAMMES 漢字
-        form.mt-4(method="post")
+        //- Indice de pagination
+        form.mt-4(method="post" target="kanji/:page")
             .form-group.mb-2
                 label.font-weight-bolder Type de recherche :
                 select.custom-select.mb-3(name="typeSearch")
@@ -21,13 +22,29 @@ block content
                 button.btn.btn-secondary(type="submit") Valider
                 span.ml-2= error
         .container-lg
+            ul.mt-4.d-flex.justify-content-center
+                if nbPages
+                    if (params > nbPages)
+                        li
+                            p Désolé cette page n'existe pas
+                    else
+                        if (page > 1 )
+                            li
+                                a.btn.btn-secondary.mx-3(href="/previous" role="button")  <
+                        li.align-self-center
+                            label.mt-2 #{page} / #{nbPages}
+                        if (page < nbPages)
+                            li
+                                a.btn.btn-secondary.mx-3(href="/next" role="button") >
+                        li.ml-3.align-self-center
+                            label.mt-2 #{nbResult} Résultat(s)
             .row.mt-4
+                //- affichage du kanji et de ses infos
                 each line in kanji
                     
                     .col-lg-3.d-flex.align-items-center.justify-content-center.flex-column.border.border-dark 
                         p#fontsizexl.font-weight-bolder= line.symbole
-                        form.mt-4(method="post")
-                            a.btn.btn-secondary.mx-3(href="/kanji" role="button")  kanji aléatoire 
+                        a.btn.btn-secondary.mx-3(href="/alea" role="button")  kanji aléatoire 
                     .col-lg-9.font-weight-bolder.border.border-dark
                         table.table.table-striped.text-center.border.mt-3
                             tr
@@ -44,7 +61,7 @@ block content
                                 td(colspan=1 style="background-color: #bf0426; color: white;") Vocabulaire
                                 td(colspan=1 style="background-color: #bf0426; color: white;") Prononciation
                                 td(colspan=2 style="background-color: #bf0426; color: white;") Traduction   
-
+                            //- affichage du vocabulaire lié au kanji
                             each file in vocab
                                 if(file.id == line.id)                       
                                     -var i;
@@ -53,25 +70,19 @@ block content
                                             td= file.kanji_japonais[i]
                                             td= file.prononciation[i]
                                             td(colspan=2)= file.trad_fr[i]
-        form.mt-4(method="post")
-            .form-group.mb-2
-                label.font-weight-bolder Type de recherche :
-                select.custom-select.mb-3(name="typeSearch")
-                    //- Si une modif est faite sur 'Choisissez un type de recherche' 
-                    //- ne pas oublier de le changer dans public-routes.js 
-                    option.selected Choisissez un type de recherche  
-                    option(value="symbole") Rechercher avec son idéogramme
-                    option(value="onyomi") Rechercher par lecture ON
-                    option(value="kunyomi") Rechercher par lecture KUN
-                    option(value="trad_fr") Rechercher le mot français
-                    option(value="nombreTrait") Recherche un kanji par son nombre de trait
-            .form-group.mb-2
-                label.font-weight-bolder(for="search") Rechercher un kanji : 
-                input#search.mx-3(type="text" name="search")
-                button.btn.btn-secondary(type="submit") Valider
-                span.ml-2= error
-        h2.my-3 MES LISTES DE KANJI
-        p Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        p Placeat eos provident quia. Doloremque dicta quis, exercitationem
-        p laborum sint earum dolor consectetur minima! Sequi eum minima 
-        p ipsa delectus voluptatem quis doloremque!
+            ul.mt-4.d-flex.justify-content-center
+                if nbPages
+                    if (params > nbPages)
+                        li
+                            p Désolé cette page n'existe pas
+                    else
+                        if (page > 1 )
+                            li
+                                a.btn.btn-secondary.mx-3(href="/previous" role="button")  <
+                        li.align-self-center
+                            label.mt-2 #{page} / #{nbPages}
+                        if (page < nbPages)
+                            li
+                                a.btn.btn-secondary.mx-3(href="/next" role="button") >
+                        li.ml-3.align-self-center
+                            a.mt-2(href="#hautDePage") Haut de page
