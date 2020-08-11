@@ -25,23 +25,27 @@ router.get('/connexion', (req, res) => {
 // ROUTE LOGIN POST
 router.post('/connexion', async (req, res) => {
     let passCheck = false;
-    const user = await userDAO.findUserByEmail(req.body.email);
-    if (user && 'pass' in user) {
-        passCheck = await bcrypt.compare(req.body.pass, user.pass);
-    }
+    try {
+        const user = await userDAO.findUserByEmail(req.body.email);
+        if (user && 'pass' in user) {
+            passCheck = await bcrypt.compare(req.body.pass, user.pass);
+        }
 
-    if (passCheck) {
-        req.session.regenerate(() => {
-            delete user.pass;
-            req.flash('infos', 'Connexion réussie');
-            req.session.user = user;
-            res.redirect('/home');
-        });
-    } else {
-        req.session.regenerate(() => {
-            req.flash('errors', 'Veuillez réessayer email ou mot de passe erronés.');
-            res.redirect('/connexion');
-        });
+        if (passCheck) {
+            req.session.regenerate(() => {
+                delete user.pass;
+                req.flash('infos', 'Connexion réussie');
+                req.session.user = user;
+                res.redirect('/home');
+            });
+        } else {
+            req.session.regenerate(() => {
+                req.flash('errors', 'Veuillez réessayer email ou mot de passe erronés.');
+                res.redirect('/connexion');
+            });
+        }
+    } catch (err) {
+        console.log(err);
     }
 });
 
@@ -60,9 +64,10 @@ router.post('/inscription', async (req, res) => {
     const test = req.body.email.match(/^[a-z0-9_\-\.]+@[a-z0-9_\-\.]+\.[a-z]+$/i);
     // test regex password
     const test2 = req.body.pass.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-!"§$%&/()=?+*~#'_:.,;]).{8,}$/);
-    // Test si l'adresse n'existe pas dans la BD
-    const checkEmail = await userDAO.checkEmail(req.body.email);
-    if (test && test2 && checkEmail == undefined) {
+    try {
+        // Test si l'adresse n'existe pas dans la BD
+        const checkEmail = await userDAO.checkEmail(req.body.email);
+        if (test && test2 && checkEmail == undefined) {
 
             const hash = await bcrypt.hash(req.body.pass, 2);
             const user = {
@@ -83,32 +88,35 @@ router.post('/inscription', async (req, res) => {
                 req.flash('infos', 'Inscription réussie.');
                 res.redirect('/home');
             });
-        
-    } else {
-        // Si non ok Récup des saisies et on lance des messages d'erreurs
-        // on a ffiche pas les champs email en rouge
-        if (test && checkEmail == undefined){
-            testemail = true;
-        }
-        const inscription = {
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            pseudo: req.body.pseudo,
-            email: req.body.email,
-            testemail: testemail,
 
-        }
-        req.session.regenerate(() => {
-            if (!test || checkEmail) {
-                req.flash('errors', 'Désolé,cette adresse email existe déjà ou est érronée !');
+        } else {
+            // Si non ok Récup des saisies et on lance des messages d'erreurs
+            // on a ffiche pas les champs email en rouge
+            if (test && checkEmail == undefined) {
+                testemail = true;
             }
-            if (!test2) {
-                req.flash('errors', `Le mot de passe doit contenir 
+            const inscription = {
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                pseudo: req.body.pseudo,
+                email: req.body.email,
+                testemail: testemail,
+
+            }
+            req.session.regenerate(() => {
+                if (!test || checkEmail) {
+                    req.flash('errors', 'Désolé,cette adresse email existe déjà ou est érronée !');
+                }
+                if (!test2) {
+                    req.flash('errors', `Le mot de passe doit contenir 
                                      8 caractères contenant au moins 1 Majuscule,
-                                     1 minuscule, 1 chiffre, 1 caractère spécial !`);       
-            }
-            res.render('inscription', inscription);
-        });
+                                     1 minuscule, 1 chiffre, 1 caractère spécial !`);
+                }
+                res.render('inscription', inscription);
+            });
+        }
+    } catch (err) {
+        console.log(err);
     }
 });
 

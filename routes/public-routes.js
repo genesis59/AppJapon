@@ -123,6 +123,7 @@ router.post('/kanji/:page([1-9]+)', async (req, res) => {
                 error: 'Désolé,cette recherche n\'as retourné aucun résultat !'
             });
         }
+
     } else {
         res.render('kanji', {
             kanji: '',
@@ -130,6 +131,7 @@ router.post('/kanji/:page([1-9]+)', async (req, res) => {
             error: 'Veuillez renseigner une recherche !'
         });
     }
+
 
 });
 
