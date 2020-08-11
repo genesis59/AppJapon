@@ -72,10 +72,7 @@ block content
                                             td(colspan=2)= file.trad_fr[i]
             ul.mt-4.d-flex.justify-content-center
                 if nbPages
-                    if (params > nbPages)
-                        li
-                            p Désolé cette page n'existe pas
-                    else
+                    if (params < nbPages)
                         if (page > 1 )
                             li
                                 a.btn.btn-secondary.mx-3(href="/previous" role="button")  <
