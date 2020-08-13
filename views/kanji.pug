@@ -4,7 +4,7 @@ block content
     .container-lg(id="hautDePage")
         h1.mt-3 LES IDEOGRAMMES 漢字
         //- Indice de pagination
-        form.mt-4(method="post" target="kanji/:page")
+        form.mt-4(method="post")
             .form-group.mb-2
                 label.font-weight-bolder Type de recherche :
                 select.custom-select.mb-3(name="typeSearch")
@@ -70,7 +70,7 @@ block content
                                             td= file.kanji_japonais[i]
                                             td= file.prononciation[i]
                                             td(colspan=2)= file.trad_fr[i]
-            ul.mt-4.d-flex.justify-content-center
+            ul.mb-5.mt-2.d-flex.justify-content-center
                 if nbPages
                     if (params < nbPages)
                         if (page > 1 )

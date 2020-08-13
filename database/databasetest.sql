@@ -97,7 +97,7 @@ INNER JOIN vocabulaire_kanji v ON v.id_kanji = k.id;
 CREATE TABLE list_kanji (
     id INT UNSIGNED AUTO_INCREMENT,
     id_user INT UNSIGNED,
-    list_name VARCHAR(100),
+    list_name VARCHAR(100) UNIQUE,
     CONSTRAINT list_kanji_to_users
         FOREIGN KEY (id_user)
         REFERENCES users(id),

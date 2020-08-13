@@ -109,7 +109,7 @@ router.post('/kanji/:page([1-9]+)', async (req, res) => {
                 file.trad_fr = file.trad_fr.split(',');
             }
             res.render('kanji', {
-                page: req.session.page,
+                page: 1,
                 nbPages: nbPages,
                 kanji: result,
                 vocab: resultJson,

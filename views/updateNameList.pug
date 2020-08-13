@@ -1,0 +1,11 @@
+extend layout
+
+block content
+    .container-lg(id="hautDePage")
+        .row
+            h2.mt-3 Modification du nom de la liste [#{result[0].list_name}]
+        .row
+            form.mt-4(method="post")
+                .form-group.mb-2
+                    input#search.mx-3(type="text" name="putList")
+                    button.btn.btn-secondary(type="submit") Nouveau nom

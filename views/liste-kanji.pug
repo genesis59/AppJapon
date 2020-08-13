@@ -1,7 +1,35 @@
 extend layout
 
 block content
-    .container-lg
-        h1.mt-3 mes listes de kanji
-        each item in result
-            p= item.list_name
+    .container-lg(id="hautDePage")
+        .row
+            h1.mt-3 mes listes de kanji
+        .row
+            form.mt-4(method="post")
+                .form-group.mb-2
+                    input#search.mx-3(type="text" name="addList")
+                    button.btn.btn-secondary(type="submit") Ajouter une liste
+        .row
+            table.table.table-striped.text-center.border.mt-3.mb-5
+                tr
+                    th vos listes
+                    th actions
+                    each item in result
+                        tr
+                            td
+                                label= item.list_name
+                            td
+                                a.btn.btn-secondary(href="/details-list/:idList" role="button")  Afficher le contenu 
+                                a.btn.btn-secondary.ml-2(href="/update/" + item.id) Modifier
+                                button.btn.btn-secondary.ml-2(type="button" data-toggle="modal" data-target="#dialogBox") Supprimer
+                                div.modal.fade(id="dialogBox" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true")
+                                    .modal-dialog
+                                        .modal-content
+                                            .modal-header
+                                                h5.modazl-title(id="modalLabel") Suppression
+                                                button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                                            .modal-body
+                                                label Voulez-vous vraiment supprimer cette liste?
+                                            .modal-footer
+                                                a.btn.btn-secondary(href="/delete/" + item.id role="button") Ok
+                                                button.btn.btn-secondary(type="button" data-dismiss="modal") Annuler                           
