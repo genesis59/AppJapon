@@ -27,6 +27,10 @@ router.post('/connexion', async (req, res) => {
     let passCheck = false;
     try {
         const user = await userDAO.findUserByEmail(req.body.email);
+        let list = await listDAO.findListByIdUser(user.id);
+        console.log(user);
+        list = JSON.parse(JSON.stringify(list));
+        console.log(list);
         if (user && 'pass' in user) {
             passCheck = await bcrypt.compare(req.body.pass, user.pass);
         }
@@ -36,6 +40,8 @@ router.post('/connexion', async (req, res) => {
                 delete user.pass;
                 req.flash('infos', 'Connexion réussie');
                 req.session.user = user;
+                req.session.list = list;
+                req.session.page = 1
                 res.redirect('/home');
             });
         } else {

@@ -33,7 +33,8 @@ router.get('/kanji/:page([1-9]+)', async (req, res) => {
         res.render('kanji', {
             kanji: [data[aleaKanji]],
             vocab: resultJson,
-            params: params
+            params: params,
+            list: req.session.list
         });
     } else {
         // si critères de recherche déjà présent dans la session
@@ -61,7 +62,8 @@ router.get('/kanji/:page([1-9]+)', async (req, res) => {
             kanji: result,
             vocab: resultJson,
             params: params,
-            nbResult: req.session.nbResult
+            nbResult: req.session.nbResult,
+            list: req.session.list
         });
     }
 });
@@ -114,7 +116,8 @@ router.post('/kanji/:page([1-9]+)', async (req, res) => {
                 kanji: result,
                 vocab: resultJson,
                 params: params,
-                nbResult: req.session.nbResult
+                nbResult: req.session.nbResult,
+                list: req.session.list
             });
         } else {
             res.render('kanji', {
@@ -136,7 +139,7 @@ router.post('/kanji/:page([1-9]+)', async (req, res) => {
 });
 
 // Suppresion des valeurs de session de recherche et affichage 
-router.get('/alea', (req, res) => {
+router.get('/post', (req, res) => {
     req.session.recherche = undefined;
     req.session.typeRecherche = undefined;
     req.session.nbPages = undefined;

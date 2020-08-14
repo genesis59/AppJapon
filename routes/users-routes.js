@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const listDAO = require('../models/list-model');
+const contentListDAO = require('../models/content-list')
 
 router.use((req, res, next) => {
     if (req.session.user) {
@@ -62,6 +63,15 @@ router.post('/update/:id', async (req, res) => {
         const result = await listDAO.findListByIdUserAndIdList(req.session.user.id, req.params.id);
         res.render('updateNameList', { result: result });
     }
+});
+
+// Ajout d'un kanji dans une liste
+
+router.post('/post',async (req,res) => {
+    const data = {id_kanji: req.query.id,id_list: req.body.listAddKanji}
+    await contentListDAO.insertOne(data)
+    req.flash('infos', 'Enregistré.');
+    res.redirect('/kanji/' + req.session.page);
 });
 
 module.exports = router;

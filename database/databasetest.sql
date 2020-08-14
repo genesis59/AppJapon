@@ -111,11 +111,11 @@ VALUES (1,'mes kanji connus'),(1,'mes kanji à réviser'),
 
 CREATE TABLE content_list (
     id INT UNSIGNED AUTO_INCREMENT,
-    id_user INT UNSIGNED,
+    id_kanji INT UNSIGNED,
     id_list INT UNSIGNED,
-    CONSTRAINT content_list_to_users
-        FOREIGN KEY (id_user)
-        REFERENCES users(id),
+    CONSTRAINT content_list_to_kanji
+        FOREIGN KEY (id_kanji)
+        REFERENCES kanji(id),
     CONSTRAINT content_list_to_list_kanji
         FOREIGN KEY (id_list)
         REFERENCES list_kanji(id),

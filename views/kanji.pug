@@ -4,7 +4,7 @@ block content
     .container-lg(id="hautDePage")
         h1.mt-3 LES IDEOGRAMMES 漢字
         //- Indice de pagination
-        form.mt-4(method="post")
+        form.mt-4(method="post" id="AfficheKanji")
             .form-group.mb-2
                 label.font-weight-bolder Type de recherche :
                 select.custom-select.mb-3(name="typeSearch")
@@ -43,8 +43,17 @@ block content
                 each line in kanji
                     
                     .col-lg-3.d-flex.align-items-center.justify-content-center.flex-column.border.border-dark 
-                        p#fontsizexl.font-weight-bolder= line.symbole
-                        a.btn.btn-secondary.mx-3(href="/alea" role="button")  kanji aléatoire 
+                        a.btn.btn-secondary.mx-3.mt-2(href="/post#alea" role="button")  kanji aléatoire
+                        p.fontsizexl.font-weight-bolder(id="alea")= line.symbole 
+                        if user
+                            form(method="post" id="addKanji" action="/post?id=" + line.id)
+                                .form-group
+                                    select.custom-select.mt-2(name="listAddKanji")
+                                        option.selected Choisissez une liste
+                                        each item in list         
+                                            option(value= item.id)= item.list_name
+                                .form-group
+                                    button.btn.btn-secondary.mx-3(type="submit")  Ajouter à ma liste
                     .col-lg-9.font-weight-bolder.border.border-dark
                         table.table.table-striped.text-center.border.mt-3
                             tr
