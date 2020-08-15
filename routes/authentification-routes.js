@@ -1,8 +1,5 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const kanjiDAO = require('../models/kanji-model');
-const lectureDAO = require('../models/lecture-model');
-const vocabDAO = require('../models/vocab-model');
 const userDAO = require('../models/users-model');
 const listDAO = require('../models/list-model');
 
@@ -28,9 +25,7 @@ router.post('/connexion', async (req, res) => {
     try {
         const user = await userDAO.findUserByEmail(req.body.email);
         let list = await listDAO.findListByIdUser(user.id);
-        console.log(user);
         list = JSON.parse(JSON.stringify(list));
-        console.log(list);
         if (user && 'pass' in user) {
             passCheck = await bcrypt.compare(req.body.pass, user.pass);
         }
@@ -84,7 +79,6 @@ router.post('/inscription', async (req, res) => {
                 pass: hash,
                 date_inscription: time
             };
-            console.log(checkEmail);
             const result = await userDAO.insertUser(user);
             // Création d'une session user si tout est ok
             req.session.regenerate(() => {

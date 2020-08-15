@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const kanjiDAO = require('../models/kanji-model');
 const vocabDAO = require('../models/vocab-model');
+const listDAO = require('../models/list-model');
 
 
 // ---------------------    route get ----------------------
@@ -14,6 +15,7 @@ router.get('/home', (req, res) => {
 // ROUTE ACCUEIL PAGE KANJI
 router.get('/kanji/:page([1-9]+)', async (req, res) => {
     const params = req.params.page;
+    let list;
     // affichage initial (pas de recherche en session)
     if (!req.session.recherche) {
         const data = await kanjiDAO.allKanji();
@@ -30,11 +32,16 @@ router.get('/kanji/:page([1-9]+)', async (req, res) => {
             file.prononciation = file.prononciation.split(',');
             file.trad_fr = file.trad_fr.split(',');
         }
+        if(req.session.user){
+            list = await listDAO.findListByIdUser(req.session.user.id);
+        } else {
+            list = '';
+        }
         res.render('kanji', {
             kanji: [data[aleaKanji]],
             vocab: resultJson,
             params: params,
-            list: req.session.list
+            list: list
         });
     } else {
         // si critères de recherche déjà présent dans la session

@@ -87,12 +87,6 @@ VALUES (1,'フランス人','Furansujin','Français'),(1,'100人','hyakunin','ce
 (7,'四、五日','shi-gonichi','quatre ou cinq jours'),(7,'四、五人','shi-gonin','quatre ou cinq personnes'),
 (7,'三々五々','san-san go-go','par petits groupes');
 
-CREATE OR REPLACE VIEW view_vocab AS
-SELECT k.id,k.symbole,v.kanji_japonais,v.prononciation,v.trad_fr FROM kanji k
-INNER JOIN lecture l ON k.id = l.id_kanji
-INNER JOIN vocabulaire_kanji v ON v.id_kanji = k.id;
-
-
 CREATE TABLE list_kanji (
     id INT UNSIGNED AUTO_INCREMENT,
     id_user INT UNSIGNED,
@@ -107,3 +101,15 @@ INSERT INTO list_kanji(id_user,list_name)
 VALUES (1,'mes kanji connus'),(1,'mes kanji à réviser'),
 (2,'mes kanji préférés'),(2,'mes kanji à apprendre'),
 (3,'mes super kanji'),(3,'kanji difficile');
+
+CREATE OR REPLACE VIEW view_vocab AS
+SELECT k.id,k.symbole,v.kanji_japonais,v.prononciation,v.trad_fr FROM kanji k
+INNER JOIN lecture l ON k.id = l.id_kanji
+INNER JOIN vocabulaire_kanji v ON v.id_kanji = k.id;
+
+CREATE OR REPLACE VIEW view_detail_list AS
+SELECT c.id AS id_content,l.id_user,l.id AS id_list,l.list_name,k.id AS id_kanji,k.symbole,k.nombreTrait,le.onyomi,le.kunyomi,le.trad_fr,le.trad_en
+FROM content_list AS c
+INNER JOIN kanji AS k ON c.id_kanji = k.id
+INNER JOIN list_kanji AS l ON c.id_list = l.id
+INNER JOIN lecture le ON le.id_kanji = k.id;

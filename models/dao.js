@@ -36,7 +36,6 @@ const DAO = function (tableName) {
 
   const deleteOneById = async id => {
     const result = await query('DELETE FROM ?? WHERE id=?', [this.tableName, id]);
-    console.log(result);
     return result[0];
   };
 

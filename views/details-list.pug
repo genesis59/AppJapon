@@ -1,0 +1,37 @@
+extend layout
+
+block content
+    .container-lg(id="hautDePage")
+        h2 détails de la liste: 
+        .container-lg.mb-5
+            .row.mt-4
+                //- affichage du kanji et de ses infos
+                each line in result       
+                    .col-lg-3.d-flex.align-items-center.justify-content-center.flex-column.border.border-dark 
+                        p.fontsizexl.font-weight-bolder(id="alea")= line.symbole
+                        a.btn.btn-secondary(href=`/delete2/${line.id_content}/${line.id_list}` role="button") Supprimer 
+                    .col-lg-9.font-weight-bolder.border.border-dark
+                        table.table.table-striped.text-center.border.mt-3
+                            tr
+                                td(style="background-color: #bf0426; color: white;") nombre de Traits
+                                td(style="background-color: #bf0426; color: white;") Onyomi
+                                td(style="background-color: #bf0426; color: white;") Kunyomi
+                                td(style="background-color: #bf0426; color: white;") Traduction
+                            tr
+                                th= line.nombreTrait
+                                th= line.onyomi
+                                th= line.kunyomi
+                                th= line.trad_fr
+                            tr
+                                td(colspan=1 style="background-color: #bf0426; color: white;") Vocabulaire
+                                td(colspan=1 style="background-color: #bf0426; color: white;") Prononciation
+                                td(colspan=2 style="background-color: #bf0426; color: white;") Traduction
+                            //- affichage du vocabulaire lié au kanji
+                            each file in vocab
+                                if(file.id == line.id_kanji)                      
+                                    -var i;
+                                    -for( i=0; i < file.kanji_japonais.length; i++)
+                                        tr
+                                            td= file.kanji_japonais[i]
+                                            td= file.prononciation[i]
+                                            td(colspan=2)= file.trad_fr[i]

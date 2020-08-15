@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const listDAO = require('../models/list-model');
-const contentListDAO = require('../models/content-list')
+const contentListDAO = require('../models/content-list');
+const vocabDAO = require('../models/vocab-model');
 
 router.use((req, res, next) => {
     if (req.session.user) {
@@ -21,6 +22,8 @@ router.post('/listes', async (req, res) => {
     try {
         const data = { id_user: req.session.user.id, list_name: req.body.addList };
         await listDAO.insertOne(data);
+        const result = await listDAO.findListByIdUser(req.session.user.id);
+        req.session.list = result;
         res.redirect('/listes');
     } catch (err) {
         console.log(err);
@@ -67,11 +70,53 @@ router.post('/update/:id', async (req, res) => {
 
 // Ajout d'un kanji dans une liste
 
-router.post('/post',async (req,res) => {
-    const data = {id_kanji: req.query.id,id_list: req.body.listAddKanji}
-    await contentListDAO.insertOne(data)
-    req.flash('infos', 'Enregistré.');
-    res.redirect('/kanji/' + req.session.page);
+router.post('/post', async (req, res) => {
+    if (req.body.id_list !== 'Choisissez une liste') {
+        const verif = await contentListDAO.findOneKanjiByIdAndList(req.query.id,req.body.id_list);
+        if (!verif) {
+            const data = { id_kanji: req.query.id, id_list: req.body.id_list }
+            await contentListDAO.insertOne(data)
+            req.flash('infos', 'Enregistré.');
+            res.redirect('/kanji/' + req.session.page);
+        } else {
+            req.flash('errors', 'Ce kanji existe déjà dans cette liste.');
+            res.redirect('/kanji/' + req.session.page);
+        }
+
+    } else {
+        req.flash('errors', 'Vous devez choisir une liste pour effectuer cette opération');
+        res.redirect('/kanji/' + req.session.page);
+    }
+
 });
+
+// Obtenir le détail d'une liste
+
+router.get('/details-list/:id', async (req, res) => {
+    let resultJson = [];
+    const result = await contentListDAO.findAllById(req.params.id);
+    for (item of result) {
+        const vocab = await vocabDAO.findVocabularyById(item.id_kanji);
+        resultJson.push(JSON.parse(JSON.stringify(vocab[0])));
+    }
+    for (let file of resultJson) {
+        file.kanji_japonais = file.kanji_japonais.split(',');
+        file.prononciation = file.prononciation.split(',');
+        file.trad_fr = file.trad_fr.split(',');
+    }
+    res.render('details-list', {
+        result: result,
+        vocab: resultJson
+    });
+});
+
+// Supprimer un kanji de la liste
+
+router.get('/delete2/:id/:list', async (req, res) => {
+    // suppression du kanji
+    await contentListDAO.deleteOneById(req.params.id);
+    res.redirect('/details-list/' + req.params.list);
+});
+
 
 module.exports = router;

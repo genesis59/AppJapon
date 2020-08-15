@@ -48,7 +48,7 @@ block content
                         if user
                             form(method="post" id="addKanji" action="/post?id=" + line.id)
                                 .form-group
-                                    select.custom-select.mt-2(name="listAddKanji")
+                                    select.custom-select.mt-2(name="id_list")
                                         option.selected Choisissez une liste
                                         each item in list         
                                             option(value= item.id)= item.list_name

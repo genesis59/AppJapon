@@ -19,7 +19,7 @@ block content
                             td
                                 label= item.list_name
                             td
-                                a.btn.btn-secondary(href="/details-list/:idList" role="button")  Afficher le contenu 
+                                a.btn.btn-secondary(href="/details-list/" + item.id role="button")  Afficher le contenu 
                                 a.btn.btn-secondary.ml-2(href="/update/" + item.id) Modifier
                                 button.btn.btn-secondary.ml-2(type="button" data-toggle="modal" data-target="#dialogBox") Supprimer
                                 div.modal.fade(id="dialogBox" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true")
