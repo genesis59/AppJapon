@@ -20,11 +20,25 @@ router.get('/listes', async (req, res) => {
 // Ajouter une liste
 router.post('/listes', async (req, res) => {
     try {
-        const data = { id_user: req.session.user.id, list_name: req.body.addList };
-        await listDAO.insertOne(data);
-        const result = await listDAO.findListByIdUser(req.session.user.id);
-        req.session.list = result;
-        res.redirect('/listes');
+        // vérification si le nom n'existe pas encore
+        let i = 0;
+        const verifNameList = await listDAO.findListByIdUser(req.session.user.id);
+        for (item of verifNameList) {
+            if (item.list_name !== req.body.addList) {
+                i++;
+            }
+        }
+        // si i == tab.length alors le nom n'existe pas
+        if (i == verifNameList.length) {
+            let data = { id_user: req.session.user.id, list_name: req.body.addList };
+            await listDAO.insertOne(data);
+            console.log(data);
+            const result = await listDAO.findListByIdUser(req.session.user.id);
+            console.log(result);
+            req.session.list = result;
+            res.redirect('/listes');
+        }
+
     } catch (err) {
         console.log(err);
     } finally {
@@ -72,7 +86,7 @@ router.post('/update/:id', async (req, res) => {
 
 router.post('/post', async (req, res) => {
     if (req.body.id_list !== 'Choisissez une liste') {
-        const verif = await contentListDAO.findOneKanjiByIdAndList(req.query.id,req.body.id_list);
+        const verif = await contentListDAO.findOneKanjiByIdAndList(req.query.id, req.body.id_list);
         if (!verif) {
             const data = { id_kanji: req.query.id, id_list: req.body.id_list }
             await contentListDAO.insertOne(data)
